@@ -37,7 +37,7 @@ const FreeVideos = () => {
     return true;
   });
 
-  const formatDuration = (d?: number) => (d != null ? `${Math.floor(d / 60)} min` : "—");
+  const formatDuration = (d?: number) => (d != null ? `${d} min` : "—");
   const thumb = (v: Video) => v.thumbnailUrl || v.thumbnail_url || "";
 
   return (
@@ -84,24 +84,26 @@ const FreeVideos = () => {
           <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {filtered.map((video) => (
-              <Card key={video.id} className="group overflow-hidden border-0 shadow-md transition-shadow hover:shadow-lg">
-                <div className="relative aspect-video overflow-hidden">
-                  <img src={thumb(video)} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
-                  <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/20">
-                    <Play className="h-12 w-12 text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+              <Link key={video.id} to={`/free-videos/${video.id}`} state={{ video }} className="block">
+                <Card className="group overflow-hidden border-0 shadow-md transition-shadow hover:shadow-lg">
+                  <div className="relative aspect-video overflow-hidden">
+                    <img src={thumb(video)} alt={video.title} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" />
+                    <div className="absolute inset-0 flex items-center justify-center bg-foreground/0 transition-colors group-hover:bg-foreground/20">
+                      <Play className="h-12 w-12 text-primary-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+                    {video.is_paid && (
+                      <Badge className="absolute left-3 top-3 bg-secondary text-secondary-foreground">Premium</Badge>
+                    )}
+                    <span className="absolute bottom-3 right-3 rounded bg-foreground/70 px-2 py-0.5 text-xs text-primary-foreground">{formatDuration(video.duration)}</span>
                   </div>
-                  {video.is_paid && (
-                    <Badge className="absolute left-3 top-3 bg-secondary text-secondary-foreground">Premium</Badge>
-                  )}
-                  <span className="absolute bottom-3 right-3 rounded bg-foreground/70 px-2 py-0.5 text-xs text-primary-foreground">{formatDuration(video.duration)}</span>
-                </div>
-                <CardContent className="p-4">
-                  <p className="text-xs text-muted-foreground">{[video.instructor, video.category].filter(Boolean).join(" · ") || "—"}</p>
-                  <h3 className="mt-1 font-serif text-lg font-semibold leading-snug">
-                    <Link to={`/free-videos/${video.id}`} className="hover:text-primary">{video.title}</Link>
-                  </h3>
-                </CardContent>
-              </Card>
+                  <CardContent className="p-4">
+                    <p className="text-xs text-muted-foreground">{[video.instructor, video.category].filter(Boolean).join(" · ") || "—"}</p>
+                    <h3 className="mt-1 font-serif text-lg font-semibold leading-snug hover:text-primary">
+                      {video.title}
+                    </h3>
+                  </CardContent>
+                </Card>
+              </Link>
             ))}
           </div>
 

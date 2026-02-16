@@ -2,6 +2,8 @@
 
 Full-stack app with Spring Boot backend, React frontend, and PostgreSQL. Ready to run with Docker and to deploy (e.g. Render, Railway).
 
+**Repository:** https://github.com/ampli5-life/Ampli-life
+
 ## Prerequisites
 
 - Docker and Docker Compose
@@ -36,4 +38,3 @@ To pick up code changes, run `./start.sh` or `docker compose up --build -d` agai
 ## Deploy
 
 See [docs/DEPLOY.md](docs/DEPLOY.md). For **Render** (database + backend + frontend from one Blueprint), see [docs/RENDER_DEPLOY.md](docs/RENDER_DEPLOY.md). For Google sign-in, see [docs/GOOGLE_OAUTH_SETUP.md](docs/GOOGLE_OAUTH_SETUP.md). For PayPal/subscription setup, see [docs/PAYPAL_SETUP.md](docs/PAYPAL_SETUP.md). This repo is set up for deployment: use your platform’s Docker or Docker Compose support (e.g. Render, Railway). Set `DATABASE_URL` (or the individual DB vars) and the same env vars as in `.env.example` in your deployment environment.
-# Ampli-life

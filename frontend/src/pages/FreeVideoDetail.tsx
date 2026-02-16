@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, useLocation, Link } from "react-router-dom";
 import { api } from "@/lib/api";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,9 +20,12 @@ interface Video {
 
 const FreeVideoDetail = () => {
   const { id } = useParams();
-  const [video, setVideo] = useState<Video | null>(null);
+  const location = useLocation();
+  const stateVideo = (location.state as { video?: Video } | null)?.video ?? null;
+  const stateMatchesId = stateVideo?.id === id;
+  const [video, setVideo] = useState<Video | null>(() => (stateMatchesId ? stateVideo : null));
   const [related, setRelated] = useState<Video[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!stateMatchesId);
 
   useEffect(() => {
     if (!id) {
@@ -33,9 +36,10 @@ const FreeVideoDetail = () => {
       api.get<Video>(`/videos/${id}`).catch(() => null),
       api.get<Video[]>("/videos").then((list) => Array.isArray(list) ? list : []),
     ]).then(([v, list]) => {
-      setVideo(v || null);
-      if (v) {
-        setRelated(list.filter((x) => x.id !== v.id && x.category === v.category).slice(0, 3));
+      const current = v ?? (stateVideo?.id === id ? stateVideo : null);
+      setVideo(current);
+      if (current) {
+        setRelated(list.filter((x) => x.id !== current.id && x.category === current.category).slice(0, 3));
       }
     }).finally(() => setLoading(false));
   }, [id]);
@@ -59,8 +63,14 @@ const FreeVideoDetail = () => {
     );
   }
 
-  const youtubeId = video.youtube_url?.split("v=")[1]?.split("&")[0];
-  const formatDuration = (d?: number) => (d != null ? `${Math.floor(d / 60)} min` : "—");
+  const youtubeUrl = video.youtube_url ?? (video as { youtubeUrl?: string }).youtubeUrl ?? "";
+  const youtubeId = (() => {
+    if (!youtubeUrl || !youtubeUrl.trim()) return null;
+    const trimmed = youtubeUrl.trim();
+    const match = trimmed.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+  })();
+  const formatDuration = (d?: number) => (d != null ? `${d} min` : "—");
 
   return (
     <div className="py-8">
@@ -80,7 +90,16 @@ const FreeVideoDetail = () => {
               allowFullScreen
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-muted-foreground">Video unavailable</div>
+            <div className="flex h-full min-h-[200px] flex-col items-center justify-center gap-2 rounded-lg border border-dashed bg-muted/30 p-6 text-center text-muted-foreground">
+              <p>This video cannot be played here.</p>
+              {youtubeUrl ? (
+                <a href={youtubeUrl} target="_blank" rel="noopener noreferrer" className="text-primary underline">
+                  Open in YouTube
+                </a>
+              ) : (
+                <p className="text-sm">No video link is set for this content.</p>
+              )}
+            </div>
           )}
         </div>
 
