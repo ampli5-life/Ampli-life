@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Lock } from "lucide-react";
 import { motion } from "framer-motion";
-import { SubscriptionPlanModal } from "@/components/SubscriptionPlanModal";
-import { api } from "@/lib/api";
+import { api, createSubscription, getToken } from "@/lib/api";
 
 interface Video {
   id: string;
@@ -46,7 +46,9 @@ const fadeUp = {
 };
 
 const Pricing = () => {
-  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+  const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [paidVideos, setPaidVideos] = useState<Video[]>([]);
 
   useEffect(() => {
@@ -55,9 +57,32 @@ const Pricing = () => {
     }).catch(() => []);
   }, []);
 
+  const handleSubscribe = async (planId: string) => {
+    if (planId !== "silver" && planId !== "gold") return;
+
+    if (!getToken()) {
+      navigate(`/login?next=${encodeURIComponent("/pricing")}`);
+      return;
+    }
+
+    setError(null);
+    setLoadingPlanId(planId);
+    try {
+      const { approvalUrl } = await createSubscription(planId);
+      if (approvalUrl) {
+        window.location.href = approvalUrl;
+        return;
+      }
+      setError("Unable to start subscription. Please try again.");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Subscription failed. Please try again.");
+    } finally {
+      setLoadingPlanId(null);
+    }
+  };
+
   return (
   <>
-    {showModal && <SubscriptionPlanModal onClose={() => setShowModal(false)} />}
     <section className="bg-primary py-20 text-primary-foreground">
       <div className="container text-center">
         <h1 className="font-serif text-4xl font-bold md:text-5xl">Simple, Honest Pricing</h1>
@@ -67,6 +92,11 @@ const Pricing = () => {
 
     <section className="py-20">
       <div className="container">
+        {error && (
+          <div className="mb-6 rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-2 text-sm text-destructive">
+            {error}
+          </div>
+        )}
         <div className="grid gap-8 md:grid-cols-2">
           {plans.map((plan, i) => (
             <motion.div key={plan.id} custom={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}>
@@ -95,8 +125,13 @@ const Pricing = () => {
                   </ul>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" variant={plan.popular ? "default" : "outline"} onClick={() => setShowModal(true)}>
-                    {plan.cta}
+                  <Button
+                    className="w-full"
+                    variant={plan.popular ? "default" : "outline"}
+                    onClick={() => handleSubscribe(plan.id)}
+                    disabled={loadingPlanId !== null}
+                  >
+                    {loadingPlanId === plan.id ? "Redirecting..." : plan.cta}
                   </Button>
                 </CardFooter>
               </Card>
