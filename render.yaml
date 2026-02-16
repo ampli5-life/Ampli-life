@@ -11,6 +11,7 @@ services:
   - type: web
     runtime: docker
     name: ampli5-backend
+    plan: free
     rootDir: backend
     dockerfilePath: ./Dockerfile
     envVars:
@@ -49,6 +50,7 @@ services:
   - type: web
     runtime: static
     name: ampli5-frontend
+    plan: free
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: ./dist
