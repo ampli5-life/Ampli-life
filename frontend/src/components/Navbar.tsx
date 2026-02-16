@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const baseNavLinks = [
   { label: "Home", to: "/" },
   { label: "About", to: "/about" },
-  { label: "Free Videos", to: "/free-videos" },
+  { label: "Videos", to: "/free-videos" },
   { label: "Blog", to: "/blog" },
   { label: "Pricing", to: "/pricing" },
   { label: "Contact", to: "/contact" },

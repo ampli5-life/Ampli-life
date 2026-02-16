@@ -44,8 +44,8 @@ const FreeVideos = () => {
     <>
       <section className="bg-primary py-16 text-primary-foreground">
         <div className="container text-center">
-          <h1 className="font-serif text-4xl font-bold md:text-5xl">Free Video Library</h1>
-          <p className="mx-auto mt-4 max-w-xl opacity-90">Explore our collection of free yoga classes — no account required.</p>
+          <h1 className="font-serif text-4xl font-bold md:text-5xl">Video Library</h1>
+          <p className="mx-auto mt-4 max-w-xl opacity-90">Explore our collection of yoga classes and resources — free and premium.</p>
         </div>
       </section>
 

@@ -16,7 +16,7 @@ const Footer = () => (
         <div>
           <h4 className="mb-3 font-sans text-sm font-semibold uppercase tracking-wider opacity-80">Explore</h4>
           <ul className="space-y-2 text-sm">
-            <li><Link to="/free-videos" className="opacity-80 hover:opacity-100">Free Videos</Link></li>
+            <li><Link to="/free-videos" className="opacity-80 hover:opacity-100">Videos</Link></li>
             <li><Link to="/blog" className="opacity-80 hover:opacity-100">Blog</Link></li>
             <li><Link to="/pricing" className="opacity-80 hover:opacity-100">Pricing</Link></li>
             <li><Link to="/about" className="opacity-80 hover:opacity-100">About Us</Link></li>

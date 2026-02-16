@@ -122,7 +122,7 @@ const Index = () => {
               <Link to="/pricing">Start Your Journey <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
             <Button size="lg" variant="outline" className="border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10" asChild>
-              <Link to="/free-videos">Browse Free Classes</Link>
+              <Link to="/free-videos">Browse Classes</Link>
             </Button>
           </motion.div>
         </div>
@@ -172,7 +172,7 @@ const Index = () => {
           </div>
           <div className="mt-8 text-center">
             <Button variant="outline" asChild>
-              <Link to="/free-videos">View All Free Videos <ArrowRight className="ml-1 h-4 w-4" /></Link>
+              <Link to="/free-videos">View All Videos <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
