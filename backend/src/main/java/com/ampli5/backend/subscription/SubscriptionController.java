@@ -3,6 +3,8 @@ package com.ampli5.backend.subscription;
 import java.security.Principal;
 import java.util.Map;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,8 +42,12 @@ public class SubscriptionController {
         }
     }
 
+    private static final Logger log = LoggerFactory.getLogger(SubscriptionController.class);
+
     @PostMapping("/subscriptions/confirm-session")
     public ResponseEntity<?> confirmBySession(@RequestBody Map<String, String> body) {
+        log.info("[DEBUG] confirmBySession CONTROLLER reached sessionId={}",
+                body != null ? (body.get("sessionId") != null ? "present" : "null") : "body null");
         String sessionId = body != null ? body.get("sessionId") : null;
         if (sessionId == null || sessionId.isBlank()) {
             return ResponseEntity.badRequest().body(Map.of("message", "sessionId is required"));
