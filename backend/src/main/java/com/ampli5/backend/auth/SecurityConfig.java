@@ -2,6 +2,8 @@ package com.ampli5.backend.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -40,6 +42,17 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SecurityFilterChain confirmSessionChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/subscriptions/confirm-session", "/api/subscriptions/confirm-session/**")
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+                .build();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .exceptionHandling(e -> e.authenticationEntryPoint(jsonAuthenticationEntryPoint))
@@ -54,7 +67,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/auth/google", "/api/auth/google/").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/stripe/webhook").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/contact").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/subscriptions/confirm-session").permitAll()
+                        // confirm-session handled by confirmSessionChain (highest precedence)
                         // Subscription endpoints - authenticated (must come before broad GET /api/**)
                         .requestMatchers(HttpMethod.POST, "/api/subscriptions/create").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/subscriptions/confirm").authenticated()

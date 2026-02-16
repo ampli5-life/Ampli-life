@@ -114,11 +114,39 @@ export async function confirmSubscriptionBySession(sessionId: string): Promise<{
   startDate: string;
   endDate: string;
 }> {
-  const res = await fetch(`${API_BASE}/subscriptions/confirm-session`, {
+  const url = `${API_BASE}/subscriptions/confirm-session`;
+  // #region agent log
+  fetch("http://127.0.0.1:7243/ingest/02b76a8b-476a-44dc-ad16-7553144ed30b", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      location: "api.ts:confirmSubscriptionBySession",
+      message: "confirmSubscriptionBySession REQUEST",
+      data: { apiBase: API_BASE, url, sessionIdPrefix: sessionId?.slice(0, 20) },
+      timestamp: Date.now(),
+      hypothesisId: "H1",
+    }),
+  }).catch(() => {});
+  // #endregion
+  const res = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ sessionId }),
   });
+  // #region agent log
+  const errBody = await res.clone().json().catch(() => ({}));
+  fetch("http://127.0.0.1:7243/ingest/02b76a8b-476a-44dc-ad16-7553144ed30b", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      location: "api.ts:confirmSubscriptionBySession",
+      message: "confirmSubscriptionBySession RESPONSE",
+      data: { status: res.status, ok: res.ok, statusText: res.statusText, body: errBody, url },
+      timestamp: Date.now(),
+      hypothesisId: "H2",
+    }),
+  }).catch(() => {});
+  // #endregion
   if (!res.ok) {
     const err = await res.json().catch(() => ({}));
     throw new Error((err as { message?: string }).message || `Request failed: ${res.status}`);
