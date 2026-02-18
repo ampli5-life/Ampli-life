@@ -7,6 +7,9 @@ import { api } from "@/lib/api";
 import { Play, Star, Users, BookOpen, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { WaveDivider, GradientStrip } from "@/components/WaveDivider";
+import { TrustBanner } from "@/components/TrustBanner";
+import { HowItWorks } from "@/components/HowItWorks";
+import { PromoBanner } from "@/components/PromoBanner";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -169,6 +172,13 @@ const Index = () => {
     <>
       {/* Hero */}
       <section className="relative overflow-hidden bg-primary py-24 text-primary-foreground md:py-32">
+        {/* Hero background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{
+            backgroundImage: "url(https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=1920&h=1080&fit=crop)",
+          }}
+        />
         {/* Shimmer overlay */}
         <div className="hero-shimmer absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white/10 to-transparent" />
@@ -200,6 +210,14 @@ const Index = () => {
           >
             {heroSubtitle}
           </motion.p>
+          <motion.p
+            className="mx-auto mt-3 max-w-lg text-sm opacity-80"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            Why practice with us? Expert-led classes, flexible schedules, and a supportive community—all designed to help you build a lasting practice.
+          </motion.p>
           <motion.div
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
@@ -222,12 +240,16 @@ const Index = () => {
 
       <WaveDivider />
 
+      <TrustBanner />
+
       {/* Featured Videos */}
       <section className="py-20">
         <div className="container">
           <div className="mb-12 text-center">
             <h2 className="font-serif text-3xl font-bold md:text-4xl">Featured Free Classes</h2>
-            <p className="mt-3 text-muted-foreground">Start your practice today — no membership required</p>
+            <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">
+              Start your practice today — no membership required. Explore our hand-picked selection of beginner-friendly flows, stretching routines, and meditation sessions.
+            </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredVideos.map((video, i) => (
@@ -242,7 +264,7 @@ const Index = () => {
                 <Card className="group overflow-hidden border-0 shadow-md transition-shadow hover:shadow-lg">
                   <div className="relative aspect-video overflow-hidden">
                     <img
-                      src={video.thumbnailUrl || ""}
+                      src={video.thumbnailUrl || "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&h=450&fit=crop"}
                       alt={video.title}
                       className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       loading="lazy"
@@ -277,12 +299,15 @@ const Index = () => {
       {/* Benefits */}
       <section className="bg-muted py-20">
         <div className="container">
-          <h2 className="mb-12 text-center font-serif text-3xl font-bold md:text-4xl">Why Ampli5?</h2>
+          <h2 className="mb-4 text-center font-serif text-3xl font-bold md:text-4xl">Why Ampli5?</h2>
+          <p className="mx-auto mb-12 max-w-2xl text-center text-muted-foreground">
+            We believe yoga should be accessible, adaptable, and aligned with your life. Here's what makes Ampli5 different.
+          </p>
           <div className="grid gap-8 md:grid-cols-3">
             {[
-              { icon: Play, title: "200+ Classes", desc: "From gentle yin to power yoga — there's a class for every mood and level." },
-              { icon: Users, title: "Expert Instructors", desc: "Learn from certified, passionate teachers with years of experience." },
-              { icon: Star, title: "Practice Anywhere", desc: "Stream on any device. Your yoga studio goes wherever you go." },
+              { icon: Play, title: "200+ Classes", desc: "From gentle yin to power yoga, restorative flows to energizing vinyasa—there's a class for every mood, level, and schedule." },
+              { icon: Users, title: "Expert Instructors", desc: "Learn from certified, passionate teachers with years of experience. Each class is thoughtfully designed to guide you safely and effectively." },
+              { icon: Star, title: "Practice Anywhere", desc: "Stream on any device—phone, tablet, or TV. Your yoga studio goes wherever you go. No commute, no waiting." },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -304,6 +329,8 @@ const Index = () => {
         </div>
       </section>
 
+      <HowItWorks />
+
       {/* Testimonials */}
       <section className="py-20">
         <div className="container">
@@ -324,6 +351,8 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      <PromoBanner />
 
       {/* Blog Highlights */}
       <section className="bg-muted py-20">
@@ -355,9 +384,9 @@ const Index = () => {
       {/* Recommended Reads */}
       <section className="py-20">
         <div className="container">
-          <h2 className="mb-12 text-center font-serif text-3xl font-bold md:text-4xl">Books We Love</h2>
+          <h2 className="mb-4 text-center font-serif text-3xl font-bold md:text-4xl">Books We Love</h2>
           <p className="mx-auto mb-10 max-w-2xl text-center text-muted-foreground">
-            A short, curated list of books to deepen your understanding of yoga, movement, and mindfulness beyond the mat.
+            A short, curated list of books to deepen your understanding of yoga, movement, and mindfulness beyond the mat. These titles have shaped our practice and we recommend them to students at every stage.
           </p>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {books.map((book, i) => (

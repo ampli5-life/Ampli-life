@@ -46,7 +46,7 @@ const Navbar = () => {
     <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <span className="flex rounded-md bg-white p-1.5">
+          <span className="flex rounded-lg border border-gray-200/80 bg-white p-2 shadow-sm">
             <img src="/logo.png" alt="Ampli5" className="h-9 object-contain" />
           </span>
           <span className="text-sm text-muted-foreground">.Life</span>
